@@ -223,6 +223,7 @@ namespace Gazeus.DesafioMatch3.Core
             {
                 for (int x = 0; x < newBoard[y].Count; x++)
                 {
+                    
                     if (x > 1 &&
                         newBoard[y][x].Type == newBoard[y][x - 1].Type &&
                         newBoard[y][x - 1].Type == newBoard[y][x - 2].Type)

@@ -19,6 +19,18 @@ namespace Gazeus.DesafioMatch3.Views
         private GameObject[][] _tiles;
         private TileSpotView[][] _tileSpots;
 
+        private ComboEffect _comboEffect;
+        private PointsMatch _pointsMatch;
+
+        private GameObject _selectedTile;
+        private Tween _selectedTileTween;
+
+        private void Start()
+        {
+            _comboEffect = FindObjectOfType<ComboEffect>();
+            _pointsMatch = FindObjectOfType<PointsMatch>();
+        }
+
         public void CreateBoard(List<List<Tile>> board)
         {
             _boardContainer.constraintCount = board[0].Count;
@@ -77,11 +89,71 @@ namespace Gazeus.DesafioMatch3.Views
 
         public Tween DestroyTiles(List<Vector2Int> matchedPosition)
         {
+            Dictionary<int, List<Vector2Int>> matchType = new Dictionary<int, List<Vector2Int>>();
             for (int i = 0; i < matchedPosition.Count; i++)
             {
                 Vector2Int position = matchedPosition[i];
-                Destroy(_tiles[position.y][position.x]);
-                _tiles[position.y][position.x] = null;
+                GameObject tile = _tiles[position.y][position.x];
+                
+                if (tile != null)
+                {
+                    int tileType = tile.GetComponent<TileType>().Type;
+
+                    if (!matchType.ContainsKey(tileType))
+                    {
+                        matchType[tileType] = new List<Vector2Int>();
+                    }
+                    matchType[tileType].Add(position);
+
+                    TintImageUI dissolveEffect = tile.GetComponent<TintImageUI>();
+                    if (dissolveEffect != null)
+                    {
+                        dissolveEffect.DissolveImage();
+                    }
+                    else
+                    {
+                        Destroy(tile, 0.2f);
+                    }
+
+                    _tiles[position.y][position.x] = null;
+                }
+            }   
+            
+            foreach(var tileMatched in matchType)
+            {
+                int tileType = tileMatched.Key;
+                List<Vector2Int> positions = tileMatched.Value;
+                foreach (Vector2Int pos in positions)
+                {
+                    Vector3 worldPos = _tileSpots[pos.y][pos.x].transform.position;
+                    if (positions.Count >= 5)
+                    {
+                        ParticlePool.Instance.SpawnFromPool("EffectMatch5", worldPos, Quaternion.identity);
+                        _pointsMatch.AddPoints(100);
+                    }
+                    else if (positions.Count == 4)
+                    {
+                        ParticlePool.Instance.SpawnFromPool("EffectMatch4", worldPos, Quaternion.identity);
+                        _pointsMatch.AddPoints(50);
+                    }
+                    else if (positions.Count == 3)
+                    {
+                        ParticlePool.Instance.SpawnFromPool("EffectMatch3", worldPos, Quaternion.identity);
+                        _pointsMatch.AddPoints(50);
+                    }
+
+                }
+            }
+
+            _comboEffect.AddCombo();
+
+            if (_selectedTile != null)
+            {
+                if (_selectedTileTween != null && _selectedTileTween.IsActive())
+                {
+                    _selectedTileTween.Kill();
+                }
+                _selectedTile = null;
             }
 
             return DOVirtual.DelayedCall(0.2f, () => { });
@@ -132,6 +204,36 @@ namespace Gazeus.DesafioMatch3.Views
         private void TileSpot_Clicked(int x, int y)
         {
             TileClicked(x, y);
+
+            if (_selectedTile != null)
+            {
+                if (_selectedTileTween != null && _selectedTileTween.IsActive())
+                {
+                    _selectedTileTween.Kill();
+                }
+
+                if (_selectedTile != null && _selectedTile.transform != null)
+                {
+                    _selectedTile.transform.localScale = Vector3.one;
+                }
+            }
+
+            _selectedTile = _tiles[y][x];
+
+            if (_selectedTile != null && _selectedTile.transform != null)
+            {
+                _selectedTileTween = _selectedTile.transform
+                    .DOScale(1.2f, 0.5f)
+                    .SetLoops(-1, LoopType.Yoyo)
+                    .SetEase(Ease.InOutSine)
+                    .OnKill(() =>
+                    {
+                        if (_selectedTile != null && _selectedTile.transform != null)
+                        {
+                            _selectedTile.transform.localScale = Vector3.one;
+                        }
+                    });
+            }
         }
         #endregion
     }
