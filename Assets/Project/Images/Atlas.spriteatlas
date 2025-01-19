@@ -40,6 +40,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 5ecca0c9638f8174c84db2848cb3777a, type: 3}
     - {fileID: 102900000, guid: 1c674d8311c512e4d924c5926632544d, type: 3}
     - {fileID: 21300000, guid: e0ac61597fc0833418358b6ef164f389, type: 3}
+    - {fileID: 21300000, guid: 935ba97b689fa87469ccbe6e6b06f01a, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -47,6 +48,7 @@ SpriteAtlas:
     - 6308f60830fd0914eb3b45c9eb866bb9: 21300000
     - e0ac61597fc0833418358b6ef164f389: 21300000
     - b80f39a9842ea7440b6ba44ec08a0356: 21300000
+    - 935ba97b689fa87469ccbe6e6b06f01a: 21300000
     - 55915c8bd0aff664f84486646e3c2132: 21300000
     - 4ccadb2ce911b1d4a9691241c3e14e33: 21300000
     - 3cab495d54baa0e4c95acc88cbba6c53: 21300000
@@ -63,6 +65,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6308f60830fd0914eb3b45c9eb866bb9, type: 3}
   - {fileID: 21300000, guid: e0ac61597fc0833418358b6ef164f389, type: 3}
   - {fileID: 21300000, guid: b80f39a9842ea7440b6ba44ec08a0356, type: 3}
+  - {fileID: 21300000, guid: 935ba97b689fa87469ccbe6e6b06f01a, type: 3}
   - {fileID: 21300000, guid: 55915c8bd0aff664f84486646e3c2132, type: 3}
   - {fileID: 21300000, guid: 4ccadb2ce911b1d4a9691241c3e14e33, type: 3}
   - {fileID: 21300000, guid: 3cab495d54baa0e4c95acc88cbba6c53, type: 3}
@@ -78,6 +81,7 @@ SpriteAtlas:
   - shield
   - button 2
   - flare_0
+  - wide border
   - blood_splatter
   - bishie_sparkle_2
   - BG
